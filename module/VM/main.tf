@@ -16,6 +16,7 @@ resource "azurerm_virtual_network" "myvnet" {
     location           = var.location   
     resource_group_name = var.rg_name
     tags               = local.tags
+    depends_on = [ azurerm_resource_group.myvm ]
 }
 
 resource "azurerm_subnet" "mysubnet" {
@@ -23,6 +24,7 @@ resource "azurerm_subnet" "mysubnet" {
   resource_group_name  = var.rg_name
   virtual_network_name = azurerm_virtual_network.myvnet.name
   address_prefixes     = var.address_prefixes
+  depends_on = [ azurerm_virtual_network.myvnet ]
 }
 
 
@@ -33,6 +35,7 @@ resource "azurerm_public_ip" "public_ip" {
   allocation_method   = "Static"
   sku                 = "Standard"
   tags = local.tags
+  depends_on = [ azurerm_resource_group.myvm ]
 }
 
 resource "azurerm_network_interface" "example" {
@@ -47,6 +50,7 @@ resource "azurerm_network_interface" "example" {
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.public_ip.id
   }
+  depends_on = [ azurerm_resource_group.myvm ]
 }
 
 resource "azurerm_linux_virtual_machine" "example" {
@@ -60,9 +64,10 @@ resource "azurerm_linux_virtual_machine" "example" {
   ]
 
   admin_ssh_key {
-    username   = "var.admin_username"
+    username   = var.admin_username
     public_key = file("~/.ssh/id_rsa.pub")
   }
+
 
   os_disk {
     caching              = "ReadWrite"
@@ -76,6 +81,7 @@ resource "azurerm_linux_virtual_machine" "example" {
     version   = "latest"
   }
   tags = local.tags
+  depends_on = [ azurerm_resource_group.myvm, azurerm_network_interface.example, azurerm_public_ip.public_ip, azurerm_virtual_network.myvnet, azurerm_subnet.mysubnet ]
 }
 
 
@@ -97,6 +103,7 @@ resource "azurerm_network_security_group" "vm_nsg" {
   }
 
  tags = local.tags
+ depends_on = [ azurerm_resource_group.myvm ]
 }
 
 resource "azurerm_network_interface_security_group_association" "nic_nsg_association" {

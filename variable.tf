@@ -19,7 +19,7 @@ variable "owner" {
 
 variable "address_space" {
   type        = list(string)
-  description = "The address space for the virtual network."    
+  description = "The address space for the virtual network."
 }
 
 variable "address_prefixes" {
@@ -28,31 +28,31 @@ variable "address_prefixes" {
 }
 
 variable "public_ip_name" {
-    type        = string
-    description = "The name of the public IP address."      
+  type        = string
+  description = "The name of the public IP address."
 }
 
 variable "nic_name" {
-  type = string
-    description = "The name of the network interface."
+  type        = string
+  description = "The name of the network interface."
 }
 
 variable "vm_name" {
-  type = string
+  type        = string
   description = "The name of the virtual machine."
 }
 
-variable "sku" {    
-    type        = string
-    description = "The SKU of the virtual machine." 
+variable "sku" {
+  type        = string
+  description = "The SKU of the virtual machine."
 }
 
 variable "admin_username" {
   type        = string
-  description = "The admin username for the virtual machine."   
+  description = "The admin username for the virtual machine."
 }
 
 variable "nsg_name" {
   type        = string
-  description = "The name of the network security group."   
+  description = "The name of the network security group."
 }
